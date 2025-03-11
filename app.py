@@ -11,7 +11,6 @@ def calculate():
     num1 = float(request.json['num1'])
     num2 = float(request.json['num2'])
     operation = request.json['operation']
-
     if operation == 'add':
         result = num1 + num2
     elif operation == 'subtract':
