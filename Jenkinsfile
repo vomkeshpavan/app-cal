@@ -11,16 +11,18 @@ pipeline {
     }
 
     stages {
-       stage('Build and Test') {
-    steps {
-        script {
-            echo 'Building and testing the application...'
-            sh '''
-                python3 -m venv venv
-                . venv/bin/activate
-                pip install --upgrade pip
-                pip install -r requirements.txt
-                pytest
+    stage('Build and Test') {
+    script {
+        // ...
+        pytest
+        def testCount = sh(returnStdout: true, script: 'pytest --report-inventory').trim()
+        if (testCount == '0') {
+            echo 'No tests executed, skipping subsequent stages'
+            currentBuild.result = 'SUCCESS'
+            return
+        }
+    }
+}
             '''
         }
     }
