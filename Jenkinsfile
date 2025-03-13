@@ -2,7 +2,8 @@ pipeline {
     agent any
 
     environment {
-        DOCKER_HUB_CREDENTIALS = credentials('docker-credentials') // Jenkins credential ID for Docker Hub
+        DOCKER_HUB_CREDENTIALS_USR = credentials('docker-credentials') // Jenkins credential ID for Docker Hub username
+        DOCKER_HUB_CREDENTIALS_PSW = credentials('docker-credentials') // Jenkins credential ID for Docker Hub password
         AWS_ACCESS_KEY_ID = credentials('aws-account') // Jenkins credential ID for AWS access key
         AWS_SECRET_ACCESS_KEY = credentials('aws-account') // Jenkins credential ID for AWS secret key
         DOCKER_IMAGE = 'vomkeshpavan/calculator:latest'
@@ -16,7 +17,7 @@ pipeline {
                 script {
                     sh '/usr/local/bin/pytest .'
                     sh '/usr/local/bin/pytest --report-inventory'
-                    def testCount = sh(returnStdout: true, script: 'pytest --report-inventory').trim()
+                    def testCount = sh(returnStdout: true, script: '/usr/local/bin/pytest --report-inventory').trim()
                     if (testCount == '0') {
                         echo 'No tests executed, skipping subsequent stages'
                         currentBuild.result = 'SUCCESS'
