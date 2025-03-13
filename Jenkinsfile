@@ -12,6 +12,7 @@ pipeline {
 
     stages {
         stage('Build and Test') {
+          steps{
             script {
                 pytest
                 def testCount = sh(returnStdout: true, script: 'pytest --report-inventory').trim()
