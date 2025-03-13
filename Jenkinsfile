@@ -11,22 +11,17 @@ pipeline {
     }
 
     stages {
-    stage('Build and Test') {
-    script {
-        
-        pytest
-        def testCount = sh(returnStdout: true, script: 'pytest --report-inventory').trim()
-        if (testCount == '0') {
-            echo 'No tests executed, skipping subsequent stages'
-            currentBuild.result = 'SUCCESS'
-            return
+        stage('Build and Test') {
+            script {
+                pytest
+                def testCount = sh(returnStdout: true, script: 'pytest --report-inventory').trim()
+                if (testCount == '0') {
+                    echo 'No tests executed, skipping subsequent stages'
+                    currentBuild.result = 'SUCCESS'
+                    return
+                }
+            }
         }
-    }
-}
-           
-        }
-    }
-}
 
         stage('Build and Push Docker Image') {
             steps {
