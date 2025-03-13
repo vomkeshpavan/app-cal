@@ -11,16 +11,20 @@ pipeline {
     }
 
     stages {
-        stage('Build and Test') {
-            steps {
-                script {
-                    echo 'Building and testing the application...'
-                   sh 'python3 -m pip install --upgrade pip'
-                   sh 'python3 -m pip install -r requirements.txt'
-                   sh 'python3 -m pytest'
-                }
-            }
+       stage('Build and Test') {
+    steps {
+        script {
+            echo 'Building and testing the application...'
+            sh '''
+                python3 -m venv venv
+                . venv/bin/activate
+                pip install --upgrade pip
+                pip install -r requirements.txt
+                pytest
+            '''
         }
+    }
+}
 
         stage('Build and Push Docker Image') {
             steps {
