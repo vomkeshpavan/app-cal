@@ -15,8 +15,8 @@ pipeline {
             steps {
                 script {
                     pytest
-                    sh 'pytest .'
-                    sh 'pytest --report-inventory'
+                    sh '/path/to/pytest .'
+                    sh '/path/to/pytest --report-inventory'
                     def testCount = sh(returnStdout: true, script: 'pytest --report-inventory').trim()
                     if (testCount == '0') {
                         echo 'No tests executed, skipping subsequent stages'
@@ -32,7 +32,7 @@ pipeline {
                 script {
                     echo 'Building and pushing Docker image...'
                     sh "docker build -t ${DOCKER_IMAGE} ."
-                    sh "echo ${DOCKER_HUB_CREDENTIALS_PSW} | docker login -u ${DOCKER_HUB_CREDENTIALS_USR} --password-stdin"
+                    sh "echo ${DOCKER_HUB_CREDENTIALS} | docker login -u ${DOCKER_HUB_CREDENTIALS} --password-stdin"
                     sh "docker push ${DOCKER_IMAGE}"
                 }
             }
