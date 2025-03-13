@@ -12,14 +12,15 @@ pipeline {
 
     stages {
         stage('Build and Test') {
-          steps{
-            script {
-                pytest
-                def testCount = sh(returnStdout: true, script: 'pytest --report-inventory').trim()
-                if (testCount == '0') {
-                    echo 'No tests executed, skipping subsequent stages'
-                    currentBuild.result = 'SUCCESS'
-                    return
+            steps {
+                script {
+                    pytest
+                    def testCount = sh(returnStdout: true, script: 'pytest --report-inventory').trim()
+                    if (testCount == '0') {
+                        echo 'No tests executed, skipping subsequent stages'
+                        currentBuild.result = 'SUCCESS'
+                        return
+                    }
                 }
             }
         }
@@ -47,15 +48,17 @@ pipeline {
                 }
             }
         }
-    }
 
-    post {
-        success {
-            echo 'Pipeline succeeded!'
-        }
-        failure {
-            echo 'Pipeline failed!'
+        stage('Post') {
+            steps {
+                script {
+                    if (currentBuild.result == 'SUCCESS') {
+                        echo 'Pipeline succeeded!'
+                    } else {
+                        echo 'Pipeline failed!'
+                    }
+                }
+            }
         }
     }
-}
 }
