@@ -16,6 +16,7 @@ pipeline {
                 script {
                     pytest
                     sh 'pytest .'
+                    sh 'pytest --report-inventory'
                     def testCount = sh(returnStdout: true, script: 'pytest --report-inventory').trim()
                     if (testCount == '0') {
                         echo 'No tests executed, skipping subsequent stages'
