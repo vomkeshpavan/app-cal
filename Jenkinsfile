@@ -15,9 +15,9 @@ pipeline {
             steps {
                 script {
                     echo 'Building and testing the application...'
-                    sh 'python -m pip install --upgrade pip'
-                    sh 'pip install -r requirements.txt'
-                    sh 'python -m pytest' // Replace with your test command
+                   sh 'python3 -m pip install --upgrade pip'
+                   sh 'python3 -m pip install -r requirements.txt'
+                   sh 'python3 -m pytest'
                 }
             }
         }
